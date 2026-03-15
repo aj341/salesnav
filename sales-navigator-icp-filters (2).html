@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Bees — Sales Navigator ICP Filter Guide</title>
+    <style>
+        :root {
+            --honey: #F5A623;
+            --honey-light: #FFF3D6;
+            --honey-dark: #C77F0A;
+            --forest: #2D6A4F;
+            --forest-light: #D8F3DC;
+            --forest-dark: #1B4332;
+            --midnight: #1A1A2E;
+            --coral: #E76F51;
+            --coral-light: #FDEAE5;
+            --sky: #457B9D;
+            --sky-light: #D6EAF8;
+            --lavender: #7B68EE;
+            --lavender-light: #EDE7FF;
+            --bg: #FAFAF7;
+            --card-bg: #FFFFFF;
+            --text: #2D2D2D;
+            --text-muted: #6B7280;
+            --border: #E5E7EB;
+            --shadow: 0 4px 24px rgba(0,0,0,0.06);
+            --shadow-hover: 0 8px 32px rgba(0,0,0,0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--midnight) 0%, var(--forest-dark) 100%);
+            color: white;
+            padding: 48px 32px;
+            text-align: center;
+        }
+        .header h1 { font-size: 2.2rem; font-weight: 700; margin-bottom: 8px; }
+        .header p { font-size: 1.1rem; opacity: 0.85; max-width: 700px; margin: 0 auto; }
+        .header .badge {
+            display: inline-block;
+            background: var(--honey);
+            color: var(--midnight);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 16px;
+        }
+
+        /* Layout */
+        .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+        /* Tabs */
+        .tab-nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0;
+        }
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tab-btn:hover { color: var(--text); }
+        .tab-btn.active { color: var(--forest); border-bottom-color: var(--forest); }
+        .tab-btn .tab-icon {
+            width: 20px; height: 20px; border-radius: 50%;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 0.7rem; color: white; font-weight: 700;
+        }
+        .tab-btn[data-tab="overview"] .tab-icon { background: var(--midnight); }
+        .tab-btn[data-tab="icp1"] .tab-icon { background: var(--sky); }
+        .tab-btn[data-tab="icp2"] .tab-icon { background: var(--coral); }
+        .tab-btn[data-tab="icp3"] .tab-icon { background: var(--lavender); }
+        .tab-btn[data-tab="personas"] .tab-icon { background: var(--forest); }
+        .tab-btn[data-tab="tips"] .tab-icon { background: var(--honey-dark); }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 28px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+            transition: box-shadow 0.2s;
+        }
+        .card:hover { box-shadow: var(--shadow-hover); }
+        .card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card h3 .icon {
+            width: 32px; height: 32px; border-radius: 8px;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+        }
+
+        /* Tier system */
+        .tier-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .tier-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--border);
+            background: white;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 140px;
+        }
+        .tier-btn:hover { border-color: var(--forest); }
+        .tier-btn.active { border-color: var(--forest); background: var(--forest-light); color: var(--forest-dark); }
+        .tier-btn .tier-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+        .tier-btn.active .tier-label { color: var(--forest); }
+        .tier-content { display: none; }
+        .tier-content.active { display: block; animation: fadeIn 0.2s ease; }
+
+        /* Filter tables */
+        .filter-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 16px 0;
+        }
+        .filter-table th {
+            background: var(--forest-light);
+            color: var(--forest-dark);
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+        .filter-table th:first-child { border-radius: 10px 0 0 0; }
+        .filter-table th:last-child { border-radius: 0 10px 0 0; }
+        .filter-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+            vertical-align: top;
+        }
+        .filter-table tr:last-child td { border-bottom: none; }
+        .filter-table tr:hover td { background: #FAFAF7; }
+
+        .filter-value {
+            background: #F3F4F6;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.82rem;
+            display: inline-block;
+            margin: 2px 0;
+            word-break: break-word;
+        }
+        .filter-value.boolean {
+            background: var(--forest-light);
+            color: var(--forest-dark);
+            font-weight: 600;
+        }
+
+        /* Copy button */
+        .copy-btn {
+            background: var(--forest);
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.78rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .copy-btn:hover { background: var(--forest-dark); }
+        .copy-btn.copied { background: var(--honey-dark); }
+
+        /* Estimated leads */
+        .lead-estimate {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--honey-light);
+            color: var(--honey-dark);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 12px;
+        }
+
+        /* Section headers */
+        .section-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--midnight);
+        }
+        .section-sub {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+        }
+
+        /* ICP header band */
+        .icp-band {
+            border-radius: 16px;
+            padding: 24px 28px;
+            margin-bottom: 24px;
+            color: white;
+        }
+        .icp-band.icp1 { background: linear-gradient(135deg, var(--sky) 0%, #264653 100%); }
+        .icp-band.icp2 { background: linear-gradient(135deg, var(--coral) 0%, #9B2226 100%); }
+        .icp-band.icp3 { background: linear-gradient(135deg, var(--lavender) 0%, #4A3ABA 100%); }
+        .icp-band h2 { font-size: 1.4rem; margin-bottom: 4px; }
+        .icp-band p { opacity: 0.9; font-size: 0.95rem; }
+        .icp-band .icp-meta {
+            display: flex;
+            gap: 24px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .icp-band .meta-item {
+            background: rgba(255,255,255,0.15);
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+        }
+        .icp-band .meta-item strong { display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8; margin-bottom: 2px; }
+
+        /* Accordion */
+        .accordion { margin-bottom: 16px; }
+        .accordion-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+        .accordion-header:hover { background: #F9FAFB; }
+        .accordion-header.open { border-radius: 12px 12px 0 0; border-bottom-color: transparent; }
+        .accordion-body {
+            display: none;
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+            background: white;
+        }
+        .accordion-body.open { display: block; animation: fadeIn 0.2s ease; }
+        .accordion-arrow { transition: transform 0.2s; font-size: 0.8rem; }
+        .accordion-header.open .accordion-arrow { transform: rotate(180deg); }
+
+        /* Tag */
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin: 2px 4px 2px 0;
+        }
+        .tag-green { background: var(--forest-light); color: var(--forest-dark); }
+        .tag-blue { background: var(--sky-light); color: var(--sky); }
+        .tag-orange { background: var(--honey-light); color: var(--honey-dark); }
+        .tag-purple { background: var(--lavender-light); color: var(--lavender); }
+        .tag-red { background: var(--coral-light); color: var(--coral); }
+
+        /* Overview grid */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        /* Comparison table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .comparison-table th {
+            padding: 14px 16px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            text-align: left;
+        }
+        .comparison-table th:nth-child(1) { background: #F3F4F6; color: var(--text); }
+        .comparison-table th:nth-child(2) { background: var(--sky); color: white; }
+        .comparison-table th:nth-child(3) { background: var(--coral); color: white; }
+        .comparison-table th:nth-child(4) { background: var(--lavender); color: white; }
+        .comparison-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.88rem;
+            vertical-align: top;
+        }
+        .comparison-table tr:last-child td { border-bottom: none; }
+        .comparison-table tr:hover td { background: #FAFAF7; }
+
+        /* Workflow steps */
+        .workflow {
+            display: flex;
+            gap: 0;
+            align-items: stretch;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .workflow-step {
+            flex: 1;
+            min-width: 180px;
+            padding: 16px;
+            background: white;
+            border: 1px solid var(--border);
+            position: relative;
+            text-align: center;
+        }
+        .workflow-step:first-child { border-radius: 12px 0 0 12px; }
+        .workflow-step:last-child { border-radius: 0 12px 12px 0; }
+        .workflow-step .step-num {
+            width: 28px; height: 28px;
+            background: var(--forest);
+            color: white;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .workflow-step h4 { font-size: 0.85rem; margin-bottom: 4px; }
+        .workflow-step p { font-size: 0.78rem; color: var(--text-muted); }
+
+        /* Spotlight / tips callout */
+        .callout {
+            padding: 20px 24px;
+            border-radius: 12px;
+            margin: 16px 0;
+            font-size: 0.9rem;
+        }
+        .callout-green { background: var(--forest-light); border-left: 4px solid var(--forest); }
+        .callout-orange { background: var(--honey-light); border-left: 4px solid var(--honey); }
+        .callout-blue { background: var(--sky-light); border-left: 4px solid var(--sky); }
+        .callout-red { background: var(--coral-light); border-left: 4px solid var(--coral); }
+        .callout strong { display: block; margin-bottom: 4px; }
+
+        /* Persona cards */
+        .persona-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .persona-card {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.2s;
+        }
+        .persona-card:hover { border-color: var(--forest); box-shadow: var(--shadow-hover); }
+        .persona-card h4 { font-size: 1.05rem; margin-bottom: 12px; color: var(--forest-dark); }
+        .persona-card .persona-filters { margin-top: 12px; }
+        .persona-card .persona-filters dt { font-weight: 600; font-size: 0.82rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px; margin-top: 8px; }
+        .persona-card .persona-filters dd { font-size: 0.9rem; margin-left: 0; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header { padding: 32px 20px; }
+            .header h1 { font-size: 1.6rem; }
+            .container { padding: 20px 16px; }
+            .tab-btn { padding: 10px 14px; font-size: 0.85rem; }
+            .icp-band .icp-meta { gap: 12px; }
+            .workflow { flex-direction: column; }
+            .workflow-step { border-radius: 0 !important; }
+            .workflow-step:first-child { border-radius: 12px 12px 0 0 !important; }
+            .workflow-step:last-child { border-radius: 0 0 12px 12px !important; }
+        }
+
+        /* Print */
+        @media print {
+            .tab-nav, .tier-selector, .copy-btn { display: none; }
+            .tab-content, .tier-content { display: block !important; }
+            .card { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>Sales Navigator ICP Filter Guide</h1>
+    <p>Optimised filter combinations for sourcing lead lists into Dripify. Three tiers per ICP: Precision (best quality), Balanced (recommended), and Wide (volume).</p>
+    <span class="badge">Design Bees — March 2026</span>
+</div>
+
+<div class="container">
+
+    <!-- Plan Level Banner -->
+    <div class="callout callout-orange" style="margin-bottom:24px;">
+        <strong>Sales Navigator Plan Levels</strong>
+        <div style="display:flex;gap:24px;flex-wrap:wrap;margin-top:8px;">
+            <div><span class="tag tag-orange">You (AJ)</span> Core — upgrading to Advanced today</div>
+            <div><span class="tag tag-purple">Nathan</span> Advanced — has Buyer Intent, Account IQ, Lead IQ</div>
+        </div>
+        <p style="margin-top:8px;font-size:0.85rem;">Filters marked <span class="tag tag-purple">Nathan's Advanced plan only</span> require the Advanced plan. Once you upgrade, you'll both have access. Buyer Intent is the most impactful — it uses AI to surface companies actively researching design/creative services.</p>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tab-nav">
+        <button class="tab-btn active" data-tab="overview">
+            <span class="tab-icon" style="background:var(--midnight)">&#9670;</span> Overview
+        </button>
+        <button class="tab-btn" data-tab="icp1">
+            <span class="tab-icon" style="background:var(--sky)">1</span> Marketing Hire
+        </button>
+        <button class="tab-btn" data-tab="icp2">
+            <span class="tab-icon" style="background:var(--coral)">2</span> Founder
+        </button>
+        <button class="tab-btn" data-tab="icp3">
+            <span class="tab-icon" style="background:var(--lavender)">3</span> Agency
+        </button>
+        <button class="tab-btn" data-tab="personas">
+            <span class="tab-icon" style="background:var(--forest)">P</span> Personas
+        </button>
+        <button class="tab-btn" data-tab="tips">
+            <span class="tab-icon" style="background:var(--honey-dark)">!</span> Pro Tips
+        </button>
+    </div>
+
+    <!-- ============ OVERVIEW TAB ============ -->
+    <div class="tab-content active" id="tab-overview">
+        <h2 class="section-header">Quick-Start Workflow</h2>
+        <p class="section-sub">The optimal process from Sales Navigator search to Dripify campaign launch.</p>
+
+        <div class="workflow">
+            <div class="workflow-step">
+                <div class="step-num">1</div>
+                <h4>Set Up Personas</h4>
+                <p>Create 3 personas in Sales Navigator matching each ICP (max 5 total)</p>
+            </div>
+            <div class="workflow-step">
+                <div class="step-num">2</div>
+                <h4>Account Search</h4>
+                <p>Find right companies first (size, industry, tech, geography)</p>
+            </div>
+            <div class="workflow-step">
+                <div class="step-num">3</div>
+                <h4>Lead Search</h4>
+                <p>Layer lead filters on top (title, seniority, spotlight signals)</p>
+            </div>
+            <div class="workflow-step">
+                <div class="step-num">4</div>
+                <h4>Save & Segment</h4>
+                <p>Save search, create lists by geography or sub-segment</p>
+            </div>
+            <div class="workflow-step">
+                <div class="step-num">5</div>
+                <h4>Export to Dripify</h4>
+                <p>Push lists into Dripify sequences (match ICP to sequence)</p>
+            </div>
+        </div>
+
+        <h2 class="section-header" style="margin-top:40px;">ICP Comparison at a Glance</h2>
+        <p class="section-sub">Side-by-side filter comparison across all three ICPs.</p>
+
+        <div style="overflow-x:auto;">
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Filter</th>
+                    <th>ICP 1: Marketing Hire</th>
+                    <th>ICP 2: Founder</th>
+                    <th>ICP 3: Agency / Consultant</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Target Titles</strong></td>
+                    <td>Marketing Manager, Chief Marketing Officer, Marketing Specialist, Marketing Director, Head of Marketing, Sales And Marketing Specialist, Marketing Coordinator, Marketing Executive, Vice President Marketing, Sales Marketing Manager</td>
+                    <td>Owner, Co-Owner, Director, Managing Director, Founder, Co-Founder, Founding Partner, Founding Director, Founding Principal, President, Principal, Chief Executive Officer, Principal Owner, Small Business Owner, Franchise Owner, General Manager, Head, Chief Officer, Entrepreneurship</td>
+                    <td>Founder, Co-Founder, Chief Executive Officer, Director, Managing Director, Agency Manager, Agency Owner, Marketing Executive, Chief Marketing Officer, Marketing Director</td>
+                </tr>
+                <tr>
+                    <td><strong>Company Size</strong></td>
+                    <td>11–200 employees</td>
+                    <td>1–50 employees</td>
+                    <td>1–15 employees (self-count or company)</td>
+                </tr>
+                <tr>
+                    <td><strong>Tech Signal</strong></td>
+                    <td>HubSpot</td>
+                    <td>Squarespace, Shopify, Mailchimp</td>
+                    <td>ActiveCampaign, HighLevel, Webflow</td>
+                </tr>
+                <tr>
+                    <td><strong>Industry</strong></td>
+                    <td>IT, Professional Services, SaaS, Healthcare, Education</td>
+                    <td>Retail, E-commerce, Health & Wellness, Professional Services</td>
+                    <td>Marketing & Advertising, PR & Comms, Management Consulting</td>
+                </tr>
+                <tr>
+                    <td><strong>Geography</strong></td>
+                    <td>Australia (start with Sydney + Melbourne)</td>
+                    <td>Australia (start with capital cities)</td>
+                    <td>Australia + NZ (English-speaking markets)</td>
+                </tr>
+                <tr>
+                    <td><strong>Dripify Sequence</strong></td>
+                    <td>Sequence 1 — Peer-to-peer</td>
+                    <td>Sequence 2 — Founder-direct</td>
+                    <td>Sequence 3 — Partnership</td>
+                </tr>
+                <tr>
+                    <td><strong>Plan to Pitch</strong></td>
+                    <td>Honeycomb Plus $1,645/mo</td>
+                    <td>Worker Bee $545/mo</td>
+                    <td>Honeycomb Plus $1,645/mo</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <div class="callout callout-green" style="margin-top:24px;">
+            <strong>Key Principle: Accounts First, Leads Second</strong>
+            Find the right companies using Account filters (size, industry, tech, growth). Then find the right people inside those companies using Lead filters (title, seniority, spotlight). This two-step approach gives far better results than searching for leads directly.
+        </div>
+    </div>
+
+    <!-- ============ ICP 1 TAB ============ -->
+    <div class="tab-content" id="tab-icp1">
+        <div class="icp-band icp1">
+            <h2>ICP 1 — The Marketing Hire</h2>
+            <p>Marketing Managers at 11–200 employee companies without a designer on staff. Drowning in Canva and freelancers.</p>
+            <div class="icp-meta">
+                <div class="meta-item"><strong>Tone</strong> Peer-to-peer, empathetic</div>
+                <div class="meta-item"><strong>Conversion</strong> 10-day free trial</div>
+                <div class="meta-item"><strong>Plan</strong> Honeycomb Plus $1,645/mo</div>
+                <div class="meta-item"><strong>Tech Signal</strong> HubSpot users</div>
+            </div>
+        </div>
+
+        <h3 style="margin-bottom:16px;">Choose Your Search Tier</h3>
+        <div class="tier-selector" data-tier-group="icp1">
+            <button class="tier-btn" data-tier="precision" onclick="switchTier('icp1','precision')">
+                Precision
+                <span class="tier-label">~200–500 leads</span>
+            </button>
+            <button class="tier-btn active" data-tier="balanced" onclick="switchTier('icp1','balanced')">
+                Balanced (Recommended)
+                <span class="tier-label">~500–1,500 leads</span>
+            </button>
+            <button class="tier-btn" data-tier="wide" onclick="switchTier('icp1','wide')">
+                Wide
+                <span class="tier-label">~1,500–3,000+ leads</span>
+            </button>
+        </div>
+
+        <!-- ICP1 Precision -->
+        <div class="tier-content" data-tier-group="icp1" data-tier="precision">
+            <div class="card">
+                <h3><span class="icon" style="background:var(--sky-light);color:var(--sky);">&#9654;</span> Precision Search — Highest Quality Leads</h3>
+                <p style="color:var(--text-muted);margin-bottom:16px;">Maximum relevance, minimal noise. Best for initial campaigns and testing messaging.</p>
+                <table class="filter-table">
+                    <thead><tr><th>Filter Category</th><th>Filter Name</th><th>Value to Set</th></tr></thead>
+                    <tbody>
+                        <tr><td rowspan="4"><strong>LEAD FILTERS</strong></td><td>Current Job Title</td><td><span class="filter-value boolean">"Marketing Manager" OR "Chief Marketing Officer" OR "Marketing Director" OR "Head of Marketing"</span> <button class="copy-btn" onclick="copyText(this, '&quot;Marketing Manager&quot; OR &quot;Chief Marketing Officer&quot; OR &quot;Marketing Director&quot; OR &quot;Head of Marketing&quot;')">Copy</button></td></tr>
+                        <tr><td>Seniority Level</td><td><span class="filter-value">Manager, Director, VP, CXO</span></td></tr>
+                        <tr><td>Function</td><td><span class="filter-value">Marketing</span></td></tr>
+                        <tr><td>Years in Current Position</td><td><span class="filter-value">1–2 years</span> <span class="tag tag-green">62% higher response rate</span></td></tr>
+                        <tr><td rowspan="7"><strong>ACCOUNT FILTERS</strong></td><td>Company Headcount</td><td><span class="filter-value">11–50, 51–200</span></td></tr>
+                        <tr><td>Industry (INCLUDE)</td><td><span class="filter-value">Information Technology, Professional Services</span></td></tr>
+                        <tr><td>Industry (EXCLUDE)</td><td><span class="filter-value" style="background:#FDEAE5;color:#E76F51;">EXCLUDE: Marketing & Advertising, Design, Graphic Design</span> <span class="tag tag-red">Critical</span></td></tr>
+                        <tr><td>Dept. Headcount (Marketing)</td><td><span class="filter-value">1–5 people</span> <span class="tag tag-green">Small team = doing design themselves</span></td></tr>
+                        <tr><td>Company Headcount Growth</td><td><span class="filter-value">10–20% or 20%+</span></td></tr>
+                        <tr><td>Hiring on LinkedIn</td><td><span class="filter-value">Yes</span> <span class="tag tag-orange">Hiring = overwhelmed, need help NOW</span></td></tr>
+                        <tr><td>HQ Location</td><td><span class="filter-value">Sydney + Melbourne, Australia</span></td></tr>
+                        <tr><td rowspan="3"><strong>SPOTLIGHT</strong></td><td>Changed Jobs</td><td><span class="filter-value">Past 90 days</span></td></tr>
+                        <tr><td>Posted on LinkedIn</td><td><span class="filter-value">Past 30 days</span></td></tr>
+                        <tr><td>Buyer Intent</td><td><span class="filter-value">Yes</span> <span class="tag tag-purple">Nathan's Advanced plan only</span></td></tr>
+                    </tbody>
+                </table>
+                <div class="callout callout-red" style="margin-top:16px;">
+                    <strong>Critical: EXCLUDE Marketing & Advertising industry.</strong> Without this, you'll get marketers who work AT agencies — they'll never buy from you because they ARE the agency. This is the single biggest quality improvement for ICP 1.
+                </div>
+                <div class="callout callout-blue" style="margin-top:8px;">
+                    <strong>Why this works:</strong> Dept. Headcount (Marketing) of 1–5 targets companies where a tiny team is doing everything including design. Years in Position 1–2 years catches marketers who've inherited design bottlenecks and want to fix them (62% higher response rate per LinkedIn data). Hiring + Growth signals = company is scaling but design capacity isn't keeping up.
+                </div>
+            </div>
+        </div>
+
+        <!-- ICP1 Balanced -->
+        <div class="tier-content active" data-tier-group="icp1" data-tier="balanced">
+            <div class="card">
+                <h3><span class="icon" style="background:var(--sky-light);color:var(--sky);">&#9654;</span> Balanced Search — Recommended Starting Point</h3>
+                <p style="color:var(--text-muted);margin-bottom:16px;">Good volume with strong relevance. Ideal for ongoing campaigns.</p>
+                <table class="filter-table">
+                    <thead><tr><th>Filter Category</th><th>Filter Name</th><th>Value to Set</th></tr></thead>
+                    <tbody>
+                        <tr><td rowspan="3"><strong>LEAD FILTERS</strong></td><td>Current Job Title</td><td><span class="filter-value boolean">"Marketing Manager" OR "Chief Marketing Officer" OR "Marketing Specialist" OR "Marketing Director" OR "Head of Marketing" OR "Sales And Marketing Specialist" OR "Marketing Coordinator" OR "Marketing Executive" OR "Vice President Marketing" OR "Sales Marketing Manager"</span> <button class="copy-btn" onclick="copyText(this, '&quot;Marketing Manager&quot; OR &quot;Chief Marketing Officer&quot; OR &quot;Marketing Specialist&quot; OR &quot;Marketing Director&quot; OR &quot;Head of Marketing&quot; OR &quot;Sales And Marketing Specialist&quot; OR &quot;Marketing Coordinator&quot; OR &quot;Marketing Executive&quot; OR &quot;Vice President Marketing&quot; OR &quot;Sales Marketing Manager&quot;')">Copy</button></td></tr>
+                        <tr><td>Seniority Level</td><td><span class="filter-value">Manager, Director, VP, CXO</span></td></tr>
+                        <tr><td>Function</td><td><span class="filter-value">Marketing</span></td></tr>
+                        <tr><td rowspan="5"><strong>ACCOUNT FILTERS</strong></td><td>Company Headcount</td><td><span class="filter-value">11–50, 51–200</span></td></tr>
+                        <tr><td>Industry (INCLUDE)</td><td><span class="filter-value">IT, Professional Services, SaaS, Healthcare, Education, Financial Services</span></td></tr>
+                        <tr><td>Industry (EXCLUDE)</td><td><span class="filter-value" style="background:#FDEAE5;color:#E76F51;">EXCLUDE: Marketing & Advertising, Design</span> <span class="tag tag-red">Critical</span></td></tr>
+                        <tr><td>Dept. Headcount (Marketing)</td><td><span class="filter-value">1–10 people</span></td></tr>
+                        <tr><td>HQ Location</td><td><span class="filter-value">Australia</span></td></tr>
+                        <tr><td><strong>SPOTLIGHT</strong></td><td>Posted on LinkedIn</td><td><span class="filter-value">Past 30 days</span></td></tr>
+                    </tbody>
+                </table>
+                <div class="callout callout-green" style="margin-top:16px;">
+                    <strong>Tip:</strong> The industry EXCLUDE is still active here — always keep it on for ICP 1. Dept. Headcount widens to 1–10 for more volume. The title + seniority + function triple ensures you hit in-house marketing decision-makers who are stuck doing design work.
+                </div>
+            </div>
+        </div>
+
+        <!-- ICP1 Wide -->
+        <div class="tier-content" data-tier-group="icp1" data-tier="wide">
+            <div class="card">
+                <h3><span class="icon" style="background:var(--sky-light);color:var(--sky);">&#9654;</span> Wide Search — Maximum Volume</h3>
+                <p style="color:var(--text-muted);margin-bottom:16px;">Cast a wider net when you need more prospects. Expect slightly lower response rates.</p>
+                <table class="filter-table">
+                    <thead><tr><th>Filter Category</th><th>Filter Name</th><th>Value to Set</th></tr></thead>
+                    <tbody>
+                        <tr><td rowspan="2"><strong>LEAD FILTERS</strong></td><td>Current Job Title</td><td><span class="filter-value boolean">"Marketing Manager" OR "Chief Marketing Officer" OR "Marketing Specialist" OR "Marketing Director" OR "Head of Marketing" OR "Sales And Marketing Specialist" OR "Marketing Coordinator" OR "Marketing Executive" OR "Vice President Marketing" OR "Sales Marketing Manager"</span> <button class="copy-btn" onclick="copyText(this, '&quot;Marketing Manager&quot; OR &quot;Chief Marketing Officer&quot; OR &quot;Marketing Specialist&quot; OR &quot;Marketing Director&quot; OR &quot;Head of Marketing&quot; OR &quot;Sales And Marketing Specialist&quot; OR &quot;Marketing Coordinator&quot; OR &quot;Marketing Executive&quot; OR &quot;Vice President Marketing&quot; OR &quot;Sales Marketing Manager&quot;')">Copy</button></td></tr>
+                        <tr><td>Function</td><td><span class="filter-value">Marketing</span></td></tr>
+                        <tr><td rowspan="3"><strong>ACCOUNT FILTERS</strong></td><td>Company Headcount</td><td><span class="filter-value">11–50, 51–200, 201–500</span></td></tr>
+                        <tr><td>Industry (EXCLUDE)</td><td><span class="filter-value" style="background:#FDEAE5;color:#E76F51;">EXCLUDE: Marketing & Advertising</span> <span class="tag tag-red">Always keep this on</span></td></tr>
+                        <tr><td>HQ Location</td><td><span class="filter-value">Australia + New Zealand</span></td></tr>
+                    </tbody>
+                </table>
+                <div class="callout callout-orange" style="margin-top:16px;">
+                    <strong>Warning:</strong> If this returns 2,500+ results, segment by state/city and create separate Dripify campaigns per geography. The industry EXCLUDE stays on even in Wide — without it you'll pollute the list with agency-side marketers.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ ICP 2 TAB ============ -->
+    <div class="tab-content" id="tab-icp2">
+        <div class="icp-band icp2">
+            <h2>ICP 2 — The Founder / Early-Stage Business</h2>
+            <p>Founders and CEOs at 1–50 employee companies doing everything themselves. Using Canva, Squarespace, Shopify.</p>
+            <div class="icp-meta">
+                <div class="meta-item"><strong>Tone</strong> Founder-to-founder, direct</div>
+                <div class="meta-item"><strong>Conversion</strong> 10-day free trial</div>
+                <div class="meta-item"><strong>Plan</strong> Worker Bee $545/mo</div>
+                <div class="meta-item"><strong>Tech Signal</strong> Squarespace / Shopify / Mailchimp</div>
+            </div>
+        </div>
+
+        <h3 style="margin-bottom:16px;">Choose Your Search Tier</h3>
+        <div class="tier-selector" data-tier-group="icp2">
+            <button class="tier-btn" data-tier="precision" onclick="switchTier('icp2','precision')">
+                Precision
+                <span class="tier-label">~200–600 leads</span>
+            </button>
+            <button class="tier-btn active" data-tier="balanced" onclick="switchTier('icp2','balanced')">
+                Balanced (Recommended)
+                <span class="tier-label">~600–2,000 leads</span>
+            </button>
+            <button class="tier-btn" data-tier="wide" onclick="switchTier('icp2','wide')">
+                Wide
+                <span class="tier-label">~2,000–5,000+ leads</span>
+            </button>
+        </div>
+
+        <!-- ICP2 Precision -->
+        <div class="tier-content" data-tier-group="icp2" data-tier="precision">
+            <div class="card">
+                <h3><span class="icon" style="background:var(--coral-light);color:var(--coral);">&#9654;</span> Precision Search — Highest Quality Leads</h3>
+                <p style="color:var(--text-muted);margin-bottom:16px;">Maximum relevance. Catches founders who need design RIGHT NOW — new businesses, funded startups, active on LinkedIn.</p>
+                <table class="filter-table">
+                    <thead><tr><th>Filter Category</th><th>Filter Name</th><th>Value to Set</th></tr></thead>
+                    <tbody>
+                        <tr><td rowspan="3"><strong>LEAD FILTERS</strong></td><td>Current Job Title</td><td><span class="filter-value boolean">"Owner" OR "Co-Owner" OR "Founder" OR "Co-Founder" OR "Chief Executive Officer" OR "Managing Director"</span> <button class="copy-btn" onclick="copyText(this, '&quot;Owner&quot; OR &quot;Co-Owner&quot; OR &quot;Founder&quot; OR &quot;Co-Founder&quot; OR &quot;Chief Executive Officer&quot; OR &quot;Managing Director&quot;')">Copy</button></td></tr>
+                        <tr><td>Seniority Level</td><td><span class="filter-value">Owner, CXO, Partner</span></td></tr>
+                        <tr><td>Years in Current Company</td><td><span class="filter-value">Less than 1 year</span> <span class="tag tag-green">Building brand from scratch</span></td></tr>
+                        <tr><td rowspan="6"><strong>ACCOUNT FILTERS</strong></td><td>Company Headcount</td><td><span class="filter-value">1–10, 11–50</span></td></tr>
+                        <tr><td>Company Type</td><td><span class="filter-value">Privately Held</span></td></tr>
+                        <tr><td>Industry</td><td><span class="filter-value">Retail, E-commerce, Health & Wellness</span></td></tr>
+                        <tr><td>Company Headcount Growth</td><td><span class="filter-value">10–20% or 20%+</span> <span class="tag tag-green">Growing = more design needs</span></td></tr>
+                        <tr><td>Funding Events (Past 12 Months)</td><td><span class="filter-value">Yes</span> <span class="tag tag-orange">Has budget, spending on brand</span></td></tr>
+                        <tr><td>HQ Location</td><td><span class="filter-value">Sydney + Melbourne, Australia</span></td></tr>
+                        <tr><td rowspan="3"><strong>SPOTLIGHT</strong></td><td>Changed Jobs</td><td><span class="filter-value">Past 90 days</span> <span class="tag tag-green">Just started a new company</span></td></tr>
+                        <tr><td>Posted on LinkedIn</td><td><span class="filter-value">Past 30 days</span></td></tr>
+                        <tr><td>Buyer Intent</td><td><span class="filter-value">Yes</span> <span class="tag tag-purple">Nathan's Advanced plan only</span></td></tr>
+                    </tbody>
+                </table>
+                <div class="callout callout-blue" style="margin-top:16px;">
+                    <strong>Why this works:</strong> "Years in Current Company &lt; 1 year" catches founders building brands from scratch — they need logos, websites, pitch decks, social templates. Funding Events signals they have budget. Changed Jobs catches brand-new company founders who need everything designed immediately. Company Type: Privately Held filters out government/non-profit/educational founders who rarely buy design subscriptions.
+                </div>
+            </div>
+        </div>
+
+        <!-- ICP2 Balanced -->
+        <div class="tier-content active" data-tier-group="icp2" data-tier="balanced">
+            <div class="card">
+                <h3><span class="icon" style="background:var(--coral-light);color:var(--coral);">&#9654;</span> Balanced Search — Recommended Starting Point</h3>
+                <p style="color:var(--text-muted);margin-bottom:16px;">Good volume. Captures both new founders AND established ones who've outgrown DIY design.</p>
+                <table class="filter-table">
+                    <thead><tr><th>Filter Category</th><th>Filter Name</th><th>Value to Set</th></tr></thead>
+                    <tbody>
+                        <tr><td rowspan="3"><strong>LEAD FILTERS</strong></td><td>Current Job Title</td><td><span class="filter-value boolean">"Owner" OR "Co-Owner" OR "Director" OR "Managing Director" OR "Founder" OR "Co-Founder" OR "Founding Partner" OR "Founding Director" OR "Founding Principal" OR "President" OR "Principal" OR "Chief Executive Officer" OR "Principal Owner" OR "Small Business Owner" OR "Franchise Owner" OR "General Manager" OR "Head" OR "Chief Officer" OR "Entrepreneurship" NOT "Consultant" NOT "Advisor"</span> <button class="copy-btn" onclick="copyText(this, '&quot;Owner&quot; OR &quot;Co-Owner&quot; OR &quot;Director&quot; OR &quot;Managing Director&quot; OR &quot;Founder&quot; OR &quot;Co-Founder&quot; OR &quot;Founding Partner&quot; OR &quot;Founding Director&quot; OR &quot;Founding Principal&quot; OR &quot;President&quot; OR &quot;Principal&quot; OR &quot;Chief Executive Officer&quot; OR &quot;Principal Owner&quot; OR &quot;Small Business Owner&quot; OR &quot;Franchise Owner&quot; OR &quot;General Manager&quot; OR &quot;Head&quot; OR &quot;Chief Officer&quot; OR &quot;Entrepreneurship&quot; NOT &quot;Consultant&quot; NOT &quot;Advisor&quot;')">Copy</button></td></tr>
+                        <tr><td>Seniority Level</td><td><span class="filter-value">Owner, CXO, Partner</span></td></tr>
+                        <tr><td>Years in Current Company</td><td><span class="filter-value">Less than 1 year, 1–2 years</span> <span class="tag tag-green">New or outgrown DIY</span></td></tr>
+                        <tr><td rowspan="4"><strong>ACCOUNT FILTERS</strong></td><td>Company Headcount</td><td><span class="filter-value">1–10, 11–50</span></td></tr>
+                        <tr><td>Company Type</td><td><span class="filter-value">Privately Held</span></td></tr>
+                        <tr><td>Industry</td><td><span class="filter-value">Retail, E-commerce, Health & Wellness, Professional Services, Food & Beverage, Hospitality</span></td></tr>
+                        <tr><td>HQ Location</td><td><span class="filter-value">Australia</span></td></tr>
+                        <tr><td><strong>SPOTLIGHT</strong></td><td>Posted on LinkedIn</td><td><span class="filter-value">Past 30 days</span></td></tr>
+                    </tbody>
+                </table>
+                <div class="callout callout-green" style="margin-top:16px;">
+                    <strong>Tip:</strong> Years in Current Company now includes 1–2 years — these founders have validated their business and are ready to invest in looking professional. The <code>NOT "Consultant" NOT "Advisor"</code> exclusion removes people with founder titles who are actually consultants. Industries widened to food & beverage, hospitality — founders needing menus, social graphics, branding.
+                </div>
+            </div>
+        </div>
+
+        <!-- ICP2 Wide -->
+        <div class="tier-content" data-tier-group="icp2" data-tier="wide">
+            <div class="card">
+                <h3><span class="icon" style="background:var(--coral-light);color:var(--coral);">&#9654;</span> Wide Search — Maximum Volume</h3>
+                <p style="color:var(--text-muted);margin-bottom:16px;">Cast the widest net. Segment by city and run separate Dripify campaigns.</p>
+                <table class="filter-table">
+                    <thead><tr><th>Filter Category</th><th>Filter Name</th><th>Value to Set</th></tr></thead>
+                    <tbody>
+                        <tr><td rowspan="2"><strong>LEAD FILTERS</strong></td><td>Current Job Title</td><td><span class="filter-value boolean">"Owner" OR "Co-Owner" OR "Director" OR "Managing Director" OR "Founder" OR "Co-Founder" OR "Founding Partner" OR "Founding Director" OR "Founding Principal" OR "President" OR "Principal" OR "Chief Executive Officer" OR "Principal Owner" OR "Small Business Owner" OR "Franchise Owner" OR "General Manager" OR "Head" OR "Chief Officer" OR "Entrepreneurship" NOT "Consultant" NOT "Advisor" NOT "Mentor"</span> <button class="copy-btn" onclick="copyText(this, '&quot;Owner&quot; OR &quot;Co-Owner&quot; OR &quot;Director&quot; OR &quot;Managing Director&quot; OR &quot;Founder&quot; OR &quot;Co-Founder&quot; OR &quot;Founding Partner&quot; OR &quot;Founding Director&quot; OR &quot;Founding Principal&quot; OR &quot;President&quot; OR &quot;Principal&quot; OR &quot;Chief Executive Officer&quot; OR &quot;Principal Owner&quot; OR &quot;Small Business Owner&quot; OR &quot;Franchise Owner&quot; OR &quot;General Manager&quot; OR &quot;Head&quot; OR &quot;Chief Officer&quot; OR &quot;Entrepreneurship&quot; NOT &quot;Consultant&quot; NOT &quot;Advisor&quot; NOT &quot;Mentor&quot;')">Copy</button></td></tr>
+                        <tr><td>Seniority Level</td><td><span class="filter-value">Owner, CXO, Partner, VP</span></td></tr>
+                        <tr><td rowspan="3"><strong>ACCOUNT FILTERS</strong></td><td>Company Headcount</td><td><span class="filter-value">1–10, 11–50</span></td></tr>
+                        <tr><td>Company Type</td><td><span class="filter-value">Privately Held</span></td></tr>
+                        <tr><td>HQ Location</td><td><span class="filter-value">Australia + New Zealand</span></td></tr>
+                    </tbody>
+                </table>
+                <div class="callout callout-orange" style="margin-top:16px;">
+                    <strong>Warning:</strong> This will return a very large list. Segment by city (Sydney, Melbourne, Brisbane, Perth, Adelaide) and run separate Dripify campaigns. The <code>NOT "Consultant" NOT "Advisor" NOT "Mentor"</code> exclusions are baked into the Boolean to keep quality up even at high volume.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ ICP 3 TAB ============ -->
+    <div class="tab-content" id="tab-icp3">
+        <div class="icp-band icp3">
+            <h2>ICP 3 — The Agency / Consultant</h2>
+            <p>Agency founders, fractional CMOs, and marketing consultants at 1–15 person firms needing white-label design capacity.</p>
+            <div class="icp-meta">
+                <div class="meta-item"><strong>Tone</strong> Partnership / B2B</div>
+                <div class="meta-item"><strong>Conversion</strong> 10-day trial on real brief</div>
+                <div class="meta-item"><strong>Plan</strong> Honeycomb Plus $1,645/mo</div>
+                <div class="meta-item"><strong>Tech Signal</strong> ActiveCampaign / HighLevel / Webflow</div>
+            </div>
+        </div>
+
+        <h3 style="margin-bottom:16px;">Choose Your Search Tier</h3>
+        <div class="tier-selector" data-tier-group="icp3">
+            <button class="tier-btn" data-tier="precision" onclick="switchTier('icp3','precision')">
+                Precision
+                <span class="tier-label">~100–400 leads</span>
+            </button>
+            <button class="tier-btn active" data-tier="balanced" onclick="switchTier('icp3','balanced')">
+                Balanced (Recommended)
+                <span class="tier-label">~400–1,200 leads</span>
+            </button>
+            <button class="tier-btn" data-tier="wide" onclick="switchTier('icp3','wide')">
+                Wide
+                <span class="tier-label">~1,200–3,000+ leads</span>
+            </button>
+        </div>
+
+        <!-- ICP3 Precision -->
+        <div class="tier-content" data-tier-group="icp3" data-tier="precision">
+            <div class="card">
+                <h3><span class="icon" style="background:var(--lavender-light);color:var(--lavender);">&#9654;</span> Precision Search — Highest Quality Leads</h3>
+                <p style="color:var(--text-muted);margin-bottom:16px;">Targets agencies that are actively growing and need design capacity NOW. Highest intent signals.</p>
+                <table class="filter-table">
+                    <thead><tr><th>Filter Category</th><th>Filter Name</th><th>Value to Set</th></tr></thead>
+                    <tbody>
+                        <tr><td rowspan="4"><strong>LEAD FILTERS</strong></td><td>Current Job Title</td><td><span class="filter-value boolean">"Founder" OR "Co-Founder" OR "Chief Executive Officer" OR "Director" OR "Managing Director" OR "Agency Owner" NOT "Graphic Designer"</span> <button class="copy-btn" onclick="copyText(this, '&quot;Founder&quot; OR &quot;Co-Founder&quot; OR &quot;Chief Executive Officer&quot; OR &quot;Director&quot; OR &quot;Managing Director&quot; OR &quot;Agency Owner&quot; NOT &quot;Graphic Designer&quot;')">Copy</button></td></tr>
+                        <tr><td>Seniority Level</td><td><span class="filter-value">Owner, CXO, Director</span></td></tr>
+                        <tr><td>Function</td><td><span class="filter-value">Marketing, Business Development</span></td></tr>
+                        <tr><td>Years in Current Position</td><td><span class="filter-value">2+ years</span> <span class="tag tag-green">Established agency with clients</span></td></tr>
+                        <tr><td rowspan="7"><strong>ACCOUNT FILTERS</strong></td><td>Company Headcount</td><td><span class="filter-value">1–10, 11–50</span></td></tr>
+                        <tr><td>Company Type</td><td><span class="filter-value">Privately Held</span></td></tr>
+                        <tr><td>Industry</td><td><span class="filter-value">Marketing & Advertising</span></td></tr>
+                        <tr><td>Company Headcount Growth</td><td><span class="filter-value">10–20% or 20%+</span> <span class="tag tag-red">Killer filter — growing agency = overflow work</span></td></tr>
+                        <tr><td>Hiring on LinkedIn</td><td><span class="filter-value">Yes</span> <span class="tag tag-red">Highest intent — hiring designers = need capacity NOW</span></td></tr>
+                        <tr><td>Dept. Headcount Growth</td><td><span class="filter-value">Positive growth (Marketing/Operations)</span></td></tr>
+                        <tr><td>HQ Location</td><td><span class="filter-value">Australia</span></td></tr>
+                        <tr><td rowspan="2"><strong>SPOTLIGHT</strong></td><td>Posted on LinkedIn</td><td><span class="filter-value">Past 30 days</span></td></tr>
+                        <tr><td>Buyer Intent</td><td><span class="filter-value">Yes</span> <span class="tag tag-purple">Nathan's Advanced plan only</span></td></tr>
+                    </tbody>
+                </table>
+                <div class="callout callout-blue" style="margin-top:16px;">
+                    <strong>Why this works:</strong> Company Headcount Growth (10%+) targets agencies taking on more clients and hitting capacity — they NEED overflow support. Hiring on LinkedIn is the highest intent signal: agencies posting job ads for designers are literally telling you they need design capacity. You're faster and cheaper than hiring. Years in Position 2+ ensures the agency is established with steady client work (under 1 year they're still building and don't have overflow yet).
+                </div>
+            </div>
+        </div>
+
+        <!-- ICP3 Balanced -->
+        <div class="tier-content active" data-tier-group="icp3" data-tier="balanced">
+            <div class="card">
+                <h3><span class="icon" style="background:var(--lavender-light);color:var(--lavender);">&#9654;</span> Balanced Search — Recommended Starting Point</h3>
+                <p style="color:var(--text-muted);margin-bottom:16px;">Good volume with growth signals. Widens to PR and consulting agencies.</p>
+                <table class="filter-table">
+                    <thead><tr><th>Filter Category</th><th>Filter Name</th><th>Value to Set</th></tr></thead>
+                    <tbody>
+                        <tr><td rowspan="4"><strong>LEAD FILTERS</strong></td><td>Current Job Title</td><td><span class="filter-value boolean">"Founder" OR "Co-Founder" OR "Chief Executive Officer" OR "Director" OR "Managing Director" OR "Agency Manager" OR "Agency Owner" OR "Marketing Executive" OR "Chief Marketing Officer" OR "Marketing Director" NOT "Graphic Designer"</span> <button class="copy-btn" onclick="copyText(this, '&quot;Founder&quot; OR &quot;Co-Founder&quot; OR &quot;Chief Executive Officer&quot; OR &quot;Director&quot; OR &quot;Managing Director&quot; OR &quot;Agency Manager&quot; OR &quot;Agency Owner&quot; OR &quot;Marketing Executive&quot; OR &quot;Chief Marketing Officer&quot; OR &quot;Marketing Director&quot; NOT &quot;Graphic Designer&quot;')">Copy</button></td></tr>
+                        <tr><td>Seniority Level</td><td><span class="filter-value">Owner, CXO, Director, Partner</span></td></tr>
+                        <tr><td>Function</td><td><span class="filter-value">Marketing, Business Development</span></td></tr>
+                        <tr><td>Years in Current Position</td><td><span class="filter-value">1+ years</span></td></tr>
+                        <tr><td rowspan="5"><strong>ACCOUNT FILTERS</strong></td><td>Company Headcount</td><td><span class="filter-value">1–10, 11–50</span></td></tr>
+                        <tr><td>Industry</td><td><span class="filter-value">Marketing & Advertising, PR & Communications, Management Consulting</span></td></tr>
+                        <tr><td>Company Headcount Growth</td><td><span class="filter-value">3–10% or higher</span> <span class="tag tag-green">Growing = busy = overflow</span></td></tr>
+                        <tr><td>Hiring on LinkedIn</td><td><span class="filter-value">Yes</span> <span class="tag tag-orange">Strong intent signal</span></td></tr>
+                        <tr><td>HQ Location</td><td><span class="filter-value">Australia + New Zealand</span></td></tr>
+                        <tr><td><strong>SPOTLIGHT</strong></td><td>Posted on LinkedIn</td><td><span class="filter-value">Past 30 days</span></td></tr>
+                    </tbody>
+                </table>
+                <div class="callout callout-green" style="margin-top:16px;">
+                    <strong>Tip:</strong> The <code>NOT "Graphic Designer"</code> exclusion is critical — without it, you'll get solo designers who won't buy design services. Company Growth + Hiring together surface agencies that are busy and scaling. If this returns too few results, drop the Hiring filter first (it's the most restrictive).
+                </div>
+            </div>
+        </div>
+
+        <!-- ICP3 Wide -->
+        <div class="tier-content" data-tier-group="icp3" data-tier="wide">
+            <div class="card">
+                <h3><span class="icon" style="background:var(--lavender-light);color:var(--lavender);">&#9654;</span> Wide Search — Maximum Volume</h3>
+                <p style="color:var(--text-muted);margin-bottom:16px;">Broadest reach across agency types and geographies. Segment by country for Dripify campaigns.</p>
+                <table class="filter-table">
+                    <thead><tr><th>Filter Category</th><th>Filter Name</th><th>Value to Set</th></tr></thead>
+                    <tbody>
+                        <tr><td rowspan="2"><strong>LEAD FILTERS</strong></td><td>Current Job Title</td><td><span class="filter-value boolean">"Founder" OR "Co-Founder" OR "Chief Executive Officer" OR "Director" OR "Managing Director" OR "Agency Manager" OR "Agency Owner" OR "Marketing Executive" OR "Chief Marketing Officer" OR "Marketing Director" OR "Creative Director" NOT "Graphic Designer" NOT "Intern"</span> <button class="copy-btn" onclick="copyText(this, '&quot;Founder&quot; OR &quot;Co-Founder&quot; OR &quot;Chief Executive Officer&quot; OR &quot;Director&quot; OR &quot;Managing Director&quot; OR &quot;Agency Manager&quot; OR &quot;Agency Owner&quot; OR &quot;Marketing Executive&quot; OR &quot;Chief Marketing Officer&quot; OR &quot;Marketing Director&quot; OR &quot;Creative Director&quot; NOT &quot;Graphic Designer&quot; NOT &quot;Intern&quot;')">Copy</button></td></tr>
+                        <tr><td>Seniority Level</td><td><span class="filter-value">Owner, CXO, Director, Partner, VP</span></td></tr>
+                        <tr><td rowspan="3"><strong>ACCOUNT FILTERS</strong></td><td>Company Headcount</td><td><span class="filter-value">1–10, 11–50</span></td></tr>
+                        <tr><td>Industry</td><td><span class="filter-value">Marketing & Advertising, PR & Communications, Management Consulting, Media Production, Events Services</span></td></tr>
+                        <tr><td>HQ Location</td><td><span class="filter-value">Australia + New Zealand + Singapore</span></td></tr>
+                    </tbody>
+                </table>
+                <div class="callout callout-orange" style="margin-top:16px;">
+                    <strong>Warning:</strong> Growth and Hiring filters are dropped here for volume. Expect more noise — review the first 50 results to quality-check before pushing to Dripify. Segment by country for separate campaigns. The <code>NOT "Graphic Designer" NOT "Intern"</code> exclusions stay on to maintain minimum quality.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ PERSONAS TAB ============ -->
+    <div class="tab-content" id="tab-personas">
+        <h2 class="section-header">Sales Navigator Personas Setup</h2>
+        <p class="section-sub">You can have up to 5 Personas in Sales Navigator. Two default ones exist (Director+ and CXO). Create 3 custom ones matching your ICPs.</p>
+
+        <div class="callout callout-green" style="margin-bottom:24px;">
+            <strong>How Personas Work</strong>
+            Personas are saved filter templates using Function, Seniority, Job Title, and Geography. Once created, you can apply them instantly from the "Workflow" section of any Lead Search. They also power Lead Recommendations — Sales Navigator will proactively suggest leads matching your personas.
+        </div>
+
+        <div class="persona-grid">
+            <div class="persona-card">
+                <span class="tag tag-blue">Persona 1</span>
+                <h4>The Marketing Hire</h4>
+                <dl class="persona-filters">
+                    <dt>Function</dt>
+                    <dd>Marketing</dd>
+                    <dt>Seniority</dt>
+                    <dd>Manager, Director, VP, CXO</dd>
+                    <dt>Job Title</dt>
+                    <dd>"Marketing Manager" OR "Chief Marketing Officer" OR "Marketing Specialist" OR "Marketing Director" OR "Head of Marketing" OR "Sales And Marketing Specialist" OR "Marketing Coordinator" OR "Marketing Executive" OR "Vice President Marketing" OR "Sales Marketing Manager"</dd>
+                    <dt>Geography</dt>
+                    <dd>Australia</dd>
+                </dl>
+            </div>
+
+            <div class="persona-card">
+                <span class="tag tag-red">Persona 2</span>
+                <h4>The Founder</h4>
+                <dl class="persona-filters">
+                    <dt>Function</dt>
+                    <dd>Business Development, Operations</dd>
+                    <dt>Seniority</dt>
+                    <dd>Owner, CXO, Partner</dd>
+                    <dt>Job Title</dt>
+                    <dd>"Owner" OR "Co-Owner" OR "Director" OR "Managing Director" OR "Founder" OR "Co-Founder" OR "Founding Partner" OR "Founding Director" OR "Founding Principal" OR "President" OR "Principal" OR "Chief Executive Officer" OR "Principal Owner" OR "Small Business Owner" OR "Franchise Owner" OR "General Manager" OR "Head" OR "Chief Officer" OR "Entrepreneurship"</dd>
+                    <dt>Geography</dt>
+                    <dd>Australia</dd>
+                </dl>
+            </div>
+
+            <div class="persona-card">
+                <span class="tag tag-purple">Persona 3</span>
+                <h4>The Agency / Consultant</h4>
+                <dl class="persona-filters">
+                    <dt>Function</dt>
+                    <dd>Marketing, Business Development</dd>
+                    <dt>Seniority</dt>
+                    <dd>Owner, CXO, Director, Partner</dd>
+                    <dt>Job Title</dt>
+                    <dd>"Founder" OR "Co-Founder" OR "Chief Executive Officer" OR "Director" OR "Managing Director" OR "Agency Manager" OR "Agency Owner" OR "Marketing Executive" OR "Chief Marketing Officer" OR "Marketing Director"</dd>
+                    <dt>Geography</dt>
+                    <dd>Australia, New Zealand</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top:24px;">
+            <h3><span class="icon" style="background:var(--forest-light);color:var(--forest);">&#9776;</span> How to Create Personas — Step by Step</h3>
+            <ol style="padding-left:20px; line-height:2;">
+                <li>Go to <strong>Sales Navigator Homepage</strong></li>
+                <li>Click the <strong>"Personas"</strong> tab in the left sidebar</li>
+                <li>Click <strong>"Create Persona"</strong> (you can create up to 3 custom ones)</li>
+                <li>Name it (e.g., "Marketing Hire - ICP1")</li>
+                <li>Set the <strong>Function, Seniority, Job Title, and Geography</strong> from the values above</li>
+                <li>Save — it's now available as a one-click filter in any Lead Search</li>
+            </ol>
+        </div>
+
+        <div class="card">
+            <h3><span class="icon" style="background:var(--honey-light);color:var(--honey-dark);">&#9733;</span> Using Personas Effectively</h3>
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    Apply Persona + Account Filters Together
+                    <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-body">
+                    <p>When you select a Persona in Lead Search, it sets your lead-level filters. You still need to add Account filters (company size, industry, tech) on top. This combination is the most powerful search method — Persona handles "who," Account filters handle "where."</p>
+                </div>
+            </div>
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    Use with Relationship Explorer
+                    <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-body">
+                    <p>When viewing a saved Account, click "Relationship Explorer" to see all leads at that company matching your Persona. This is especially useful for ICP 1 (Marketing Hire) where you're targeting specific roles within larger companies.</p>
+                </div>
+            </div>
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    Monitor Lead Recommendations
+                    <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-body">
+                    <p>Once your Personas are active, Sales Navigator will proactively recommend matching leads. Check the "Recommended Leads" section weekly — these are free prospects you'd otherwise have to search for. Apply your Persona filter to prioritise the best matches.</p>
+                </div>
+            </div>
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    Filter Conflicts to Watch For
+                    <span class="accordion-arrow">&#9660;</span>
+                </div>
+                <div class="accordion-body">
+                    <p><strong>Important:</strong> Any lead filters that contradict your Persona's attributes will be overridden. For example, if your Persona says "Manager, Director" seniority but you manually add "Entry Level," the Persona's values win. If you need to temporarily search outside your Persona, deselect it first.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ TIPS TAB ============ -->
+    <div class="tab-content" id="tab-tips">
+        <h2 class="section-header">Pro Tips & Best Practices</h2>
+        <p class="section-sub">Research-backed strategies for optimal Sales Navigator to Dripify results.</p>
+
+        <div class="overview-grid">
+            <div class="card">
+                <h3><span class="icon" style="background:var(--forest-light);color:var(--forest);">1</span> Right-Size Your Lists</h3>
+                <p><strong>Sweet spot: 500–1,500 leads per search.</strong></p>
+                <ul style="padding-left:18px;margin-top:8px;line-height:1.8;">
+                    <li>Over 2,500? Too broad — add more filters or segment by geography</li>
+                    <li>Under 100? Too narrow — remove a filter (usually tech or spotlight)</li>
+                    <li>Break large lists into geo-based Dripify campaigns (e.g., Sydney, Melbourne, Brisbane)</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3><span class="icon" style="background:var(--coral-light);color:var(--coral);">2</span> Technology Filter Caveat</h3>
+                <p><strong>Sales Navigator's "Technologies Used" filter is unreliable.</strong></p>
+                <ul style="padding-left:18px;margin-top:8px;line-height:1.8;">
+                    <li>LinkedIn doesn't disclose how they detect tech stacks</li>
+                    <li>Data goes stale as companies change tools</li>
+                    <li>Use it as a <em>Precision tier bonus</em>, not a core filter</li>
+                    <li><strong>Better alternative:</strong> Use BuiltWith or Wappalyzer to build tech-filtered lists, then cross-reference in Sales Navigator</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3><span class="icon" style="background:var(--sky-light);color:var(--sky);">3</span> Spotlight Filters Are Gold</h3>
+                <p><strong>Prospects in Spotlight are 64% more likely to respond to InMail.</strong></p>
+                <ul style="padding-left:18px;margin-top:8px;line-height:1.8;">
+                    <li><strong>Changed jobs (90 days):</strong> New role = new budget, new tools, open to pitches</li>
+                    <li><strong>Posted on LinkedIn (30 days):</strong> Active users who'll see your Dripify touches</li>
+                    <li><strong>Shared experiences:</strong> Same university, same group — warm connection path</li>
+                    <li>Use sparingly in Balanced/Wide tiers (they reduce volume significantly)</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3><span class="icon" style="background:var(--lavender-light);color:var(--lavender);">4</span> Boolean Best Practices</h3>
+                <p><strong>Write Booleans in a text editor, then paste into Sales Navigator.</strong></p>
+                <ul style="padding-left:18px;margin-top:8px;line-height:1.8;">
+                    <li>Operators <strong>MUST be uppercase</strong>: AND, OR, NOT</li>
+                    <li>Use quotes for exact phrases: <code>"Head of Marketing"</code></li>
+                    <li>Parentheses for grouping: <code>("CEO" OR "Founder") NOT "Consultant"</code></li>
+                    <li>Think in <strong>title clusters</strong>, not single titles</li>
+                    <li>Always add NOT exclusions to remove noise</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3><span class="icon" style="background:var(--honey-light);color:var(--honey-dark);">5</span> Seniority & Function Gotchas</h3>
+                <p><strong>LinkedIn guesses seniority from titles — and often gets it wrong.</strong></p>
+                <ul style="padding-left:18px;margin-top:8px;line-height:1.8;">
+                    <li>A CEO with 4 open experiences might be tagged as "Entry Level" on one of them</li>
+                    <li><strong>Always pair</strong> seniority with explicit job titles for reliability</li>
+                    <li>Function filter is more reliable than seniority for filtering departments</li>
+                    <li>For ICP 2 (Founders), rely on job title over seniority since many founders have quirky titles</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3><span class="icon" style="background:var(--forest-light);color:var(--forest);">6</span> Saved Searches & Ongoing Prospecting</h3>
+                <p><strong>Save every search you create. Revisit quarterly.</strong></p>
+                <ul style="padding-left:18px;margin-top:8px;line-height:1.8;">
+                    <li>Saved searches auto-detect new matching profiles</li>
+                    <li>Green number badge = new leads added since last check</li>
+                    <li>Revisit and refresh Boolean strings quarterly as your ICP evolves</li>
+                    <li>Duplicate searches and change only geography for easy segmentation</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3><span class="icon" style="background:var(--coral-light);color:var(--coral);">&#9888;</span> Common Mistakes to Avoid</h3>
+            <table class="filter-table">
+                <thead><tr><th>Mistake</th><th>Why It's Bad</th><th>Fix</th></tr></thead>
+                <tbody>
+                    <tr><td>Using only the Seniority filter without Job Titles</td><td>LinkedIn's seniority algorithm is inaccurate — CEOs get tagged as "Entry Level"</td><td>Always use Job Title Boolean as your primary filter, seniority as secondary</td></tr>
+                    <tr><td>Not excluding irrelevant titles</td><td>"Director" returns IT Directors, HR Directors, etc.</td><td>Add <code>NOT "IT Director" NOT "HR"</code> or use Function filter</td></tr>
+                    <tr><td>Trusting Technologies Used as a core filter</td><td>Data is unreliable and goes stale</td><td>Use it as a bonus in Precision tier only; use BuiltWith for serious tech targeting</td></tr>
+                    <tr><td>Running one massive search for all 3 ICPs</td><td>Impossible to personalise messaging in Dripify</td><td>Separate search per ICP, matched to its specific Dripify sequence</td></tr>
+                    <tr><td>Not segmenting by geography</td><td>2,500+ leads in one campaign gets messy and impersonal</td><td>Duplicate search, change only the city/state, personalise messages per region</td></tr>
+                    <tr><td>Ignoring Spotlight filters</td><td>You're missing high-intent signals that dramatically increase reply rates</td><td>Use "Posted on LinkedIn" as a minimum in Balanced tier</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h3><span class="icon" style="background:var(--sky-light);color:var(--sky);">&#128279;</span> Sources & Further Reading</h3>
+            <ul style="padding-left:18px;line-height:2;">
+                <li><a href="https://evaboot.com/blog/linkedin-sales-navigator-search-filters" target="_blank">Evaboot — Sales Navigator Search Filters 2026</a></li>
+                <li><a href="https://www.salesrobot.co/blogs/sales-navigator-filters" target="_blank">SalesRobot — Advanced Search Filters + 7 Hacks 2026</a></li>
+                <li><a href="https://evaboot.com/blog/sales-navigator-personas" target="_blank">Evaboot — Sales Navigator Personas Guide</a></li>
+                <li><a href="https://www.copilotai.com/blog/how-to-use-sales-navigator-personas-on-linkedin" target="_blank">CopilotAI — How to Use Personas</a></li>
+                <li><a href="https://www.linkedin.com/help/sales-navigator/answer/a1420199" target="_blank">LinkedIn Help — Create a Persona</a></li>
+                <li><a href="https://sbl.so/linkedin/sales-navigator-filters-guide/" target="_blank">SBL — Sales Navigator Filters Guide 2026</a></li>
+                <li><a href="https://www.outx.ai/blog/linkedin-sales-navigator-filter" target="_blank">OutX — All Sales Navigator Filters Explained 2026</a></li>
+                <li><a href="https://www.cleverly.co/blog/linkedin-sales-navigator-guide" target="_blank">Cleverly — Ultimate Guide to Sales Navigator 2026</a></li>
+                <li><a href="https://www.givemeleads.io/blog/how-to-use-linkedin-sales-navigator-boolean-search" target="_blank">GiveMeLeads — Boolean Search Guide 2026</a></li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+        });
+    });
+
+    // Tier switching
+    function switchTier(group, tier) {
+        document.querySelectorAll(`.tier-selector[data-tier-group="${group}"] .tier-btn`).forEach(b => {
+            b.classList.toggle('active', b.dataset.tier === tier);
+        });
+        document.querySelectorAll(`.tier-content[data-tier-group="${group}"]`).forEach(c => {
+            c.classList.toggle('active', c.dataset.tier === tier);
+        });
+    }
+
+    // Copy to clipboard
+    function copyText(btn, text) {
+        navigator.clipboard.writeText(text).then(() => {
+            const orig = btn.textContent;
+            btn.textContent = 'Copied!';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.textContent = orig;
+                btn.classList.remove('copied');
+            }, 2000);
+        });
+    }
+
+    // Accordion
+    function toggleAccordion(header) {
+        const body = header.nextElementSibling;
+        const isOpen = header.classList.contains('open');
+        header.classList.toggle('open');
+        body.classList.toggle('open');
+    }
+</script>
+
+</body>
+</html>
